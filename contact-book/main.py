@@ -1,4 +1,5 @@
 import json
+import re
 
 def load_contacts():
 
@@ -10,6 +11,53 @@ def load_contacts():
         contacts = json.load(file)
 
     return contacts
+
+def is_valid_phone(phone):
+
+    pattern = r"^\d{10}$"
+
+    return bool(
+        re.match(
+            pattern,
+            phone
+        )
+    )
+
+def is_valid_name(name):
+
+    pattern = r"^[A-Za-z ]+$"
+
+    return bool(
+        re.match(
+            pattern,
+            name.strip()
+        )
+    )
+
+def is_valid_name(name):
+
+    pattern = r"^[A-Za-z]+$"
+
+    return bool(
+        re.match(
+            pattern,
+            name.strip()
+        )
+    )
+
+def is_valid_email(email):
+
+    pattern = (r"^[a-zA-Z0-9._%+-]+"
+            r"@[a-zA-z0-9.-]+"
+            r"\.[a-zA-Z]{2,}$"
+            )
+    
+    return bool(
+        re.match(
+            pattern,
+            email
+        )
+    ) 
 
 def save_contacts(contacts):
     
@@ -24,25 +72,70 @@ def save_contacts(contacts):
             indent=4
         )
 
-def add_contacts(contacts):
-    
-    name = input(
-        "Enter Name: "
-    )
+def contact_exists(
+        contacts,
+        name
+):
+    for contact in contacts:
 
-    phone = input(
-        "Enter Phone: "
-    )
+        if(
+            contact["name"].lower()
+            ==
+            name.lower()
+        ):
+            print(
+                "Contact Already Exists"
+         )
+            return True
+        
+    return False
 
-    email = input(
-        "Enter Email: "
-    )
+def add_contact(contacts):
 
-    contact = {
-        "name": name,
-        "phone": phone,
-        "email": email
-    }
+    while True:
+
+        name = input(
+            "Enter Name: "
+        ).strip()
+
+        if is_valid_name(name):
+            break
+
+        print(
+            "Invalid Name. Use letters and spaces only"
+        )
+
+    if contact_exists(
+        contacts,
+        name
+    ):
+        return
+
+    while True:
+
+        phone = input(
+            "Enter Phone: "
+        )
+
+        if is_valid_phone(phone):
+            break
+
+        print(
+            "Invalid Phone Number"
+        )
+
+    while True:
+
+        email = input(
+            "Enter Email: "
+        )
+
+        if is_valid_email(email):
+            break
+
+        print(
+            "Invalid Email Address"
+        )
 
     contact = {
         "name": name,
@@ -54,11 +147,14 @@ def add_contacts(contacts):
 
     save_contacts(contacts)
 
-    print("Contact Added Successfully!")
+    print(
+        "Contact Added Successfully"
+    )
 
 def view_contacts(contacts):
     
-    if len(contacts) == 0:
+    # if len(contacts) == 0:
+    if not contacts:
 
         print("No Contacts Found")
 
@@ -84,7 +180,7 @@ def view_contacts(contacts):
 
 def search_contacts(contacts):
     
-    search_name = input("Enter Name To seaarch : ")
+    search_name = input("Enter Name To search : ")
 
     for contact in contacts:
 
@@ -164,6 +260,18 @@ def delete_contacts(contacts):
             ==
             search_name.lower()
         ):
+
+            confirmation = input(
+                "Are you sure you want to delete this contact? (y/n): "
+            ).strip().lower()
+
+            if confirmation not in ["y", "yes"]:
+
+                print(
+                    "Delete Cancelled"
+                )
+
+                return
             
             contacts.remove(contact)
 
@@ -222,7 +330,7 @@ def main():
 
         if choice == "1":
 
-            add_contacts(contacts)
+            add_contact(contacts)
 
         elif choice == "2":
 
@@ -252,7 +360,17 @@ def main():
 
             print("Invalid Choice")
 
-
+#     print(
+#     is_valid_phone(
+#         "9876543210"
+#     )
+#    )
+    
+#     print(
+#     is_valid_email(
+#         "Alex@gmail.com"
+#     )
+#    )
 
 if __name__ == "__main__":
     main()
