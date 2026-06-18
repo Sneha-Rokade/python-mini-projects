@@ -1,5 +1,6 @@
 import json
 import re
+import csv
 
 def load_contacts():
 
@@ -26,17 +27,6 @@ def is_valid_phone(phone):
 def is_valid_name(name):
 
     pattern = r"^[A-Za-z ]+$"
-
-    return bool(
-        re.match(
-            pattern,
-            name.strip()
-        )
-    )
-
-def is_valid_name(name):
-
-    pattern = r"^[A-Za-z]+$"
 
     return bool(
         re.match(
@@ -207,6 +197,149 @@ def search_contacts(contacts):
             return
 
     print("Contact Not Found")
+
+def search_by_phone(contacts):
+
+    search_phone = input(
+        "Enter Phone To Search : "
+    )
+
+    for contact in contacts:
+
+        if (
+            contact["phone"]
+            ==
+            search_phone
+        ):
+
+            print("\n Contact Found")
+
+            print(
+                f"Name  : {contact['name']}"
+            )
+
+            print(
+                f"Phone : {contact['phone']}"
+            )
+
+            print(
+                f"Email : {contact['email']}"
+            )
+
+            return
+
+    print(
+        "Contact Not Found"
+    )
+
+def sort_contacts(contacts):
+
+    contacts.sort(
+        key=lambda contact: contact["name"].lower()
+    )
+
+    save_contacts(contacts)
+
+    print(
+        "Contacts Sorted Successfully"
+    )
+
+def export_csv(contacts):
+
+    file_name = input(
+        "Enter CSV file name to export : "
+    )
+
+    if not file_name.endswith(".csv"):
+
+        file_name += ".csv"
+
+    with open(
+        file_name,
+        "w",
+        newline=""
+    ) as file:
+
+        writer = csv.DictWriter(
+            file,
+            fieldnames=["name", "phone", "email"]
+        )
+
+        writer.writeheader()
+
+        writer.writerows(contacts)
+
+    print(
+        "Contacts Exported Successfully"
+    )
+
+def import_csv(contacts):
+
+    file_name = input(
+        "Enter CSV file name to import : "
+    )
+
+    try:
+
+        with open(
+            file_name,
+            "r",
+            newline=""
+        ) as file:
+
+            reader = csv.DictReader(file)
+
+            imported_count = 0
+
+            skipped_count = 0
+
+            for row in reader:
+
+                name = row.get("name", "").strip()
+
+                phone = row.get("phone", "").strip()
+
+                email = row.get("email", "").strip()
+
+                if (
+                    not is_valid_name(name)
+                    or
+                    not is_valid_phone(phone)
+                    or
+                    not is_valid_email(email)
+                    or
+                    contact_exists(contacts, name)
+                ):
+
+                    skipped_count += 1
+
+                    continue
+
+                contact = {
+                    "name": name,
+                    "phone": phone,
+                    "email": email
+                }
+
+                contacts.append(contact)
+
+                imported_count += 1
+
+        save_contacts(contacts)
+
+        print(
+            f"{imported_count} Contacts Imported Successfully"
+        )
+
+        print(
+            f"{skipped_count} Contacts Skipped"
+        )
+
+    except FileNotFoundError:
+
+        print(
+            "CSV File Not Found"
+        )
         
 
 def update_contacts(contacts):
@@ -322,7 +455,11 @@ def main():
         print("3. Search Contact")
         print("4. Update Contact")
         print("5. Delete Contact")
-        print("6. Exit")
+        print("6. Search By Phone")
+        print("7. Sort Contacts")
+        print("8. Export CSV")
+        print("9. Import CSV")
+        print("10. Exit")
 
         choice = input(
             "Enter Choice: "
@@ -349,6 +486,22 @@ def main():
             delete_contacts(contacts)
 
         elif choice == "6":
+
+            search_by_phone(contacts)
+
+        elif choice == "7":
+
+            sort_contacts(contacts)
+
+        elif choice == "8":
+
+            export_csv(contacts)
+
+        elif choice == "9":
+
+            import_csv(contacts)
+
+        elif choice == "10":
 
             print(
                 "Thank You!"
