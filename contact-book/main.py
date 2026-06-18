@@ -2,7 +2,8 @@ from services.contact_service import (
     add_contact,
     view_contacts,
     search_contact,
-    delete_contact
+    delete_contact,
+    update_contact
 )
 
 def menu():
@@ -12,7 +13,8 @@ def menu():
         print("2. View Contacts")
         print("3. Search Contact")
         print("4. Delete Contact")
-        print("5. Exit")
+        print("5. Update Contact")
+        print("6. Exit")
 
         choice = input("Enter choice: ")
 
@@ -25,6 +27,8 @@ def menu():
         elif choice == "4":
             delete_contact()
         elif choice == "5":
+            update_contact()
+        elif choice == "6":
             break
         else:
             print("Invalid choice")

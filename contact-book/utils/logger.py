@@ -3,7 +3,7 @@ import logging
 logging.basicConfig(
     filename="contact_book.log",
     level=logging.INFO,
-    format="%(acstime)s - %(levelname)s - %(message)s"
+    format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
 def log_info(message):
