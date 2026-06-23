@@ -1,6 +1,7 @@
 from utils.file_handler import load_contacts, save_contacts
-from utils.logger import log_info
+from utils.logger import log_error, log_info
 from services.validation_service import is_valid_email, is_valid_phone
+from utils.ui import print_contact
 
 
 def contact_exists(contacts, name):
@@ -60,7 +61,7 @@ def view_contacts():
             chunk = contacts[i:i + page_size]
 
             for contact in chunk:
-                print(contact)
+                print_contact(contact)
 
             if i + page_size < len(contacts):
                 input("\nPress Enter to see more...")
@@ -75,7 +76,7 @@ def search_contact():
     try:
 
         contacts = load_contacts()
-        name = input("Enter name to search: ")
+        name = input("Enter name to search: ").lower()
 
         results = [
             contact for contact in contacts
@@ -84,7 +85,7 @@ def search_contact():
 
         if results:
             for contact in results:
-                print(contact)
+                print_contact(contact)
         
         else:
             print("No matching contacts found")
@@ -98,16 +99,30 @@ def delete_contact():
     contacts = load_contacts()
     name = input("Enter name to delete: ")
 
+    found = False
+    for c in contacts:
+        if c["name"].lower() == name.lower():
+            found = True
+            break
+    
+    if not found:
+        print("Contact not Found")
+        return
+    
+    confirm = input("Are you sure you want to delete? (yes/no): ").lower()
+
+    if confirm != "yes":
+        print("Deletion Cancelled!")
+        return
+    
     new_contacts = [
         c for c in contacts if c["name"].lower() != name.lower()
     ]
 
-    if len(new_contacts) == len(contacts):
-        print("Contact not found")
-    else:
-        save_contacts(new_contacts)
-        log_info(f"Deleted contact: {name}")
-        print("Contact deleted")
+    save_contacts(new_contacts)
+    log_info(f"Deleted contact: {name}")
+    print("Contact deleted successfully!")
+
 
 def update_contact():
     try:
@@ -115,24 +130,28 @@ def update_contact():
         name = input("Enter name to update: ").lower()
 
         for contact in contacts:
-            if contact["name"].lower() == name:
+            if contact["name"].lower() == name.lower():
 
-                print("Leave blank if no change")
+                print("\nCurrent Details:")
+                print_contact(contact)
 
-                new_phone = input("Enter new phone: ")
-                new_email = input("Enter new email: ")
+                confirm = input("Do you want to update this contact? (yes/no): ").lower()
+                if confirm not in ["yes", "y"]:
+                    print("Update Cancelled!")
+                    return
 
-                if new_phone:
-                    if is_valid_phone(new_phone):
-                        contact["phone"] = new_phone
-                    else:
-                        print("Invalid phone, skipping")
+                new_phone = input("Enter new phone: ").strip()
+                while not is_valid_phone(new_phone):
+                    print("Invalid phone! Please try again")
+                    new_phone = input("Enter new phone: ").strip()
 
-                if new_email:
-                    if is_valid_email(new_email):
-                        contact["email"] = new_email
-                    else:
-                        print("Invalid email, skipping")
+                new_email = input("Enter new email: ").strip()
+                while not is_valid_email(new_email):
+                    print("Invalid Email Address! Please try again")
+                    new_email = input("Enter new email: ").strip()
+
+                contact["phone"] = new_phone
+                contact["email"] = new_email
 
                 save_contacts(contacts)
                 log_info(f"Updated contact: {name}")

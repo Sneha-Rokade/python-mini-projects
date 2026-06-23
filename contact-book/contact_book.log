@@ -1,4 +1,6 @@
 2026-06-18 16:25:47,325 - INFO - Added contact: bob
 2026-06-18 16:26:36,072 - INFO - Added contact: charlie
 2026-06-18 16:26:46,855 - INFO - Deleted contact: charlie
-2026-06-18 16:27:31,694 - INFO - Updated contact: bob
+2026-06-18 16:27:31,694 - INFO - Updated contact: bob2026-06-23 11:38:54,754 - INFO - Added contact: John
+2026-06-23 11:41:14,786 - INFO - Added contact: David
+2026-06-23 11:42:57,693 - INFO - Deleted contact: david

@@ -5,6 +5,7 @@ from services.contact_service import (
     delete_contact,
     update_contact
 )
+from utils.logger import log_error
 
 def menu():
     while True:
@@ -16,22 +17,27 @@ def menu():
         print("5. Update Contact")
         print("6. Exit")
 
-        choice = input("Enter choice: ")
+        try:
+            choice = input("Enter choice: ")
 
-        if choice == "1":
-            add_contact()
-        elif choice == "2":
-            view_contacts()
-        elif choice == "3":
-            search_contact()
-        elif choice == "4":
-            delete_contact()
-        elif choice == "5":
-            update_contact()
-        elif choice == "6":
-            break
-        else:
-            print("Invalid choice")
+            if choice == "1":
+                add_contact()
+            elif choice == "2":
+                view_contacts()
+            elif choice == "3":
+                search_contact()
+            elif choice == "4":
+                delete_contact()
+            elif choice == "5":
+                update_contact()
+            elif choice == "6":
+                break
+            else:
+                print("Invalid choice")
+        except Exception as e:
+             print("Something went wrong. Please try again.")
+             log_error(str(e))
+    
 
 
 if __name__ == "__main__":
