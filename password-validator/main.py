@@ -1,67 +1,34 @@
-# 1. password should contain 8 characters length should be 8
+def check_password_strength(password):
 
-# str1 = "Heelo"
+    min_length = 8
 
-# def passwd(p):
-#     if str1 == p:
-#         return "Valid password"
-#     else:
-#         return "Invalid password"
+    upper_found = False
+    lower_found = False
 
-# print(passwd("Heelo"))
+    if len(password) > min_length:
+        strength = "Strong"
+    elif len(password) == min_length:
+        strength = "Good"
+    else: 
+        strength = "Weak"
 
+    for ch in password:
+        if ch.isupper():
+            upper_found = True
+        if ch.islower():
+            lower_found = True
+    
+    if upper_found and lower_found:
+        case_msg = "Contains both uppercase and lowercase letters"
+    else:
+        case_msg = "Should contain at least one uppercase and one lowercase letter"
 
-# password = "Lo123"
-enter_password = input("Enter password : ")
-len_password = "########"
-password_len = len(len_password)
-upper_found = False
-lower_found = False
+    return strength, case_msg
 
-passwd_len = len(enter_password)
+if __name__ == "__main__":
+    user_password = input("Enter password: ")
 
-for ch in enter_password:
-    if ch.isupper():
-        upper_found = True
-    if ch.islower():
-        lower_found = True
+    strength, message = check_password_strength(user_password)
 
-if passwd_len > password_len:
-    print("Strong password")
-elif passwd_len == password_len:
-    print("Good Password")
-else:
-    print("Weak password")
-
-if upper_found and lower_found:
-    print("Valid password has one uppercase/lowercase letter")
-else:
-     print("InValid password Should contain atleast one uppercase/lowercase letter")
-# upper_letter = input("Enter password: " )
-
-# if one_uppercase_letter in upper_letter:
-#     print("Password contain one Uppercase letter")
-# else:
-#     print("Password must contain atleast one Uppercase letter")
-
-# password = "hello123"
-
-# password_len = len(password)
-
-# enter_password = input("Enter password : ")
-
-# enter_password_len = len(enter_password)
-
-# if password_len < enter_password_len:
-#     print("Strong password")
-# elif password_len == enter_password_len:
-#     print("Good password")
-# else:
-#     print("Weak password")
-
-# p = input("Enter password ")
-
-# if password == p:
-#     print("Valid Password")
-# else:
-#    print("Invalid Password")
+    print(f"Password Strength: {strength}")
+    print(message)
