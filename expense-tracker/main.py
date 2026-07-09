@@ -6,7 +6,9 @@ def menu():
         print("1. Add Expense")
         print("2. View Expenses")
         print("3. Total Expense")
-        print("4. Exit")
+        print("4. Delete Expense")
+        print("5. Search by Category")
+        print("6. Exit")
 
         choice = input("Enter choice: ")
 
@@ -17,7 +19,10 @@ def menu():
         elif choice == "3":
             total_expense()
         elif choice == "4":
-            print("Goodbye!")
+            delete_expense()
+        elif choice == "5":
+            search_by_category()
+        elif choice == "6":
             break
         else:
             print("Invalid choice")

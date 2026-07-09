@@ -21,8 +21,9 @@ This project demonstrates real-world software engineering practices including mo
 
 * Add new contact (Name, Phone, Email)
 * View all saved contacts
-* Search contact by name
-* Delete contact
+* Search contact (Partial Search Supported)
+* Update Contact
+* Delete contact (with confirmation)
 * Input validation (Email & Phone)
 * Persistent storage using JSON
 * Logging for tracking operations

@@ -5,8 +5,8 @@
         "category": "Groceries"
     },
     {
-        "title": "Travel",
-        "amount": 150.0,
+        "title": "Uber",
+        "amount": 500.0,
         "category": "Travel"
     }
 ]
